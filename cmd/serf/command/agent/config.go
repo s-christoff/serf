@@ -36,7 +36,7 @@ func DefaultConfig() *Config {
 		QueryResponseSizeLimit: 1024,
 		QuerySizeLimit:         1024,
 		UserEventSizeLimit:     512,
-		BroadcastTimeout:       5 * time.Second,
+		BroadcastTimeout:       10 * time.Second,
 	}
 }
 

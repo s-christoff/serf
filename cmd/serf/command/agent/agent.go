@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/hashicorp/memberlist"
 	"github.com/hashicorp/serf/serf"
@@ -108,6 +109,7 @@ func (a *Agent) Start() error {
 
 // Leave prepares for a graceful shutdown of the agent and its processes
 func (a *Agent) Leave() error {
+	time.Sleep(a.conf.Slowdown)
 	if a.serf == nil {
 		return nil
 	}
@@ -160,6 +162,8 @@ func (a *Agent) SerfConfig() *serf.Config {
 
 // Join asks the Serf instance to join. See the Serf.Join function.
 func (a *Agent) Join(addrs []string, replay bool) (n int, err error) {
+	//Become slow
+	time.Sleep(a.conf.Slowdown)
 	a.logger.Printf("[INFO] agent: joining: %v replay: %v", addrs, replay)
 	ignoreOld := !replay
 	n, err = a.serf.Join(addrs, ignoreOld)
@@ -184,6 +188,8 @@ func (a *Agent) ForceLeave(node string) error {
 
 // UserEvent sends a UserEvent on Serf, see Serf.UserEvent.
 func (a *Agent) UserEvent(name string, payload []byte, coalesce bool) error {
+	//littering
+	time.Sleep(a.conf.Slowdown)
 	a.logger.Printf("[DEBUG] agent: Requesting user event send: %s. Coalesced: %#v. Payload: %#v",
 		name, coalesce, string(payload))
 	err := a.serf.UserEvent(name, payload, coalesce)
@@ -241,6 +247,8 @@ func (a *Agent) eventLoop() {
 	for {
 		select {
 		case e := <-a.eventCh:
+			//littering
+			time.Sleep(a.conf.Slowdown)
 			a.logger.Printf("[INFO] agent: Received event: %s", e.String())
 			a.eventHandlersLock.Lock()
 			handlers := a.eventHandlerList

@@ -25,6 +25,9 @@ func init() {
 
 // Config is the configuration for creating a Serf instance.
 type Config struct {
+	//Sarah breaks Serf.
+	Slowdown time.Duration
+
 	// The name of this node. This must be unique in the cluster. If this
 	// is not set, Serf will set it to the hostname of the running machine.
 	NodeName string
@@ -264,6 +267,7 @@ func DefaultConfig() *Config {
 	}
 
 	return &Config{
+		Slowdown:                     5 * time.Second,
 		NodeName:                     hostname,
 		BroadcastTimeout:             5 * time.Second,
 		LeavePropagateDelay:          1 * time.Second,
