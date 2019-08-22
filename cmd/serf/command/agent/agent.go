@@ -162,8 +162,10 @@ func (a *Agent) SerfConfig() *serf.Config {
 
 // Join asks the Serf instance to join. See the Serf.Join function.
 func (a *Agent) Join(addrs []string, replay bool) (n int, err error) {
+	fmt.Println(" Join() Before Hello world!")
 	//Become slow
 	time.Sleep(a.conf.Slowdown)
+	fmt.Println("Join() After Hello world!")
 	a.logger.Printf("[INFO] agent: joining: %v replay: %v", addrs, replay)
 	ignoreOld := !replay
 	n, err = a.serf.Join(addrs, ignoreOld)
@@ -178,6 +180,8 @@ func (a *Agent) Join(addrs []string, replay bool) (n int, err error) {
 
 // ForceLeave is used to eject a failed node from the cluster
 func (a *Agent) ForceLeave(node string) error {
+	fmt.Println("ForceLeave Hello world!")
+	time.Sleep(a.conf.Slowdown)
 	a.logger.Printf("[INFO] agent: Force leaving node: %s", node)
 	err := a.serf.RemoveFailedNode(node)
 	if err != nil {
@@ -189,6 +193,7 @@ func (a *Agent) ForceLeave(node string) error {
 // UserEvent sends a UserEvent on Serf, see Serf.UserEvent.
 func (a *Agent) UserEvent(name string, payload []byte, coalesce bool) error {
 	//littering
+	fmt.Println("User Event says hello")
 	time.Sleep(a.conf.Slowdown)
 	a.logger.Printf("[DEBUG] agent: Requesting user event send: %s. Coalesced: %#v. Payload: %#v",
 		name, coalesce, string(payload))
@@ -249,6 +254,7 @@ func (a *Agent) eventLoop() {
 		case e := <-a.eventCh:
 			//littering
 			time.Sleep(a.conf.Slowdown)
+			fmt.Println(" from event loop my dude Hello world!")
 			a.logger.Printf("[INFO] agent: Received event: %s", e.String())
 			a.eventHandlersLock.Lock()
 			handlers := a.eventHandlerList

@@ -267,7 +267,7 @@ func DefaultConfig() *Config {
 	}
 
 	return &Config{
-		Slowdown:                     5 * time.Second,
+		Slowdown:                     10 * time.Second,
 		NodeName:                     hostname,
 		BroadcastTimeout:             5 * time.Second,
 		LeavePropagateDelay:          1 * time.Second,
