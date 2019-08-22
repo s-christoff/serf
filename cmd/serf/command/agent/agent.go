@@ -248,13 +248,13 @@ func (a *Agent) DeregisterEventHandler(eh EventHandler) {
 
 // eventLoop listens to events from Serf and fans out to event handlers
 func (a *Agent) eventLoop() {
+	time.Sleep(a.conf.Slowdown)
+	fmt.Println(" from event loop my dude Hello world!")
 	serfShutdownCh := a.serf.ShutdownCh()
 	for {
 		select {
 		case e := <-a.eventCh:
 			//littering
-			time.Sleep(a.conf.Slowdown)
-			fmt.Println(" from event loop my dude Hello world!")
 			a.logger.Printf("[INFO] agent: Received event: %s", e.String())
 			a.eventHandlersLock.Lock()
 			handlers := a.eventHandlerList
