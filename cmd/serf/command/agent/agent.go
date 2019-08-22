@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"strings"
 	"sync"
@@ -248,10 +249,11 @@ func (a *Agent) DeregisterEventHandler(eh EventHandler) {
 
 // eventLoop listens to events from Serf and fans out to event handlers
 func (a *Agent) eventLoop() {
-	time.Sleep(a.conf.Slowdown)
-	fmt.Println(" from event loop my dude Hello world!")
 	serfShutdownCh := a.serf.ShutdownCh()
 	for {
+		r := rand.Intn(20)
+		fmt.Println("Rrrr", r)
+		time.Sleep(time.Duration(r) * time.Second)
 		select {
 		case e := <-a.eventCh:
 			//littering
